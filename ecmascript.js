@@ -105,4 +105,9 @@ const datalist1=[12,43,6,56,76,8,9,89]
 for(let i=0;i<datalist1.length;i++){
   console.log(datalist1[i]) 
 }
+console.log("===========.")
+
+for( const mydata of datalist1){
+  console.log(mydata)
+}
 
