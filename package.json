@@ -1,0 +1,32 @@
+{
+  "name": "code-it-mern",
+  "version": "1.0.0",
+  "description": "Mern Stack Project",
+  "keywords": [
+    "Ecommerce",
+    "Mern"
+  ],
+  "homepage": "https://github.com/Tdeflash12/mern_with_a#readme",
+  "bugs": {
+    "url": "https://github.com/Tdeflash12/mern_with_a/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tdeflash12/mern_with_a.git"
+  },
+  "license": "ISC",
+  "author": "Abhesh Mandal",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": " node server.js",
+    "dev":"nodemon server.js"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
