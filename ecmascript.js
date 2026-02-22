@@ -98,16 +98,53 @@ const add =(a,b)=> a+b;
 //Anonymous Function
 //function() {}
 ()=>{} //anonymous function arrow function
-console.log("array methods start here===========.")
+console.log("for loop start here===========.")
 
 //Array methods
-const datalist1=[12,43,6,56,76,8,9,89]
+const datalist1=[122,2,43,6,56,76,8,9,89]
 for(let i=0;i<datalist1.length;i++){
   console.log(datalist1[i]) 
 }
-console.log("===========.")
+console.log("for of loop===========.")
 
 for( const mydata of datalist1){
   console.log(mydata)
 }
 
+console.log("for each loop.")
+const squaredList=[];
+datalist1.forEach((mydata)=>{
+  const square =mydata*mydata;
+  squaredList.push(square)
+
+
+});
+console.log(squaredList)
+console.log("Map Starts Here ==============");
+//Map :[x,y,z]=>[a,b,c];
+const mapSquareList=datalist1.map((mydata)=>mydata*mydata);
+console.log(mapSquareList)
+
+console.log("Filter Starts here====");
+//filter:[a,a,b,b,a,b,a]=>[a,a,a,a];
+const filteredList =datalist1.filter((mydata)=> mydata % 2==0);
+console.log(filteredList)
+
+console.log("Sorting ========== Starts here");
+//a-b:ASC
+//b-a:DESC;
+datalist1.sort((a,b)=>a-b);
+console.log(datalist1)
+
+console.log("Find========");
+const foundData=datalist1.find((mydata)=>mydata>10); 
+console.log(foundData)
+// includes,some,every=>boolean
+//everyone should be greater than 1 then its print 1
+const everyResult= datalist1.every((mydata)=>mydata>1);
+//if the given data is greater than 2 then it will print true else false
+const someResult= datalist1.every((mydata)=>mydata>2);
+const includes=datalist1.includes(1)
+console.log(everyResult)
+console.log(someResult)
+console.log(includes)
