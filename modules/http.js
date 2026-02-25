@@ -5,7 +5,14 @@ const app = http.createServer((request,response)=>{
     console.log(request.method)
    console.log(request.url)
 
-   if(request.url === "/"){
+   if(request.method=="POST"){
+    response.writeHead(201,{ "content-type":"text/html"});
+    response.end("<h1>Data added successfully</h1>")
+    return;
+   }else if(request.method=="GET")
+   
+   {
+    if(request.url === "/"){
     response.writeHead(200,{ "content-type":"text/html"});
     response.end("<h1>HOME PAGE</h1>")
    }else if(request.url==="/about"){
@@ -13,7 +20,11 @@ const app = http.createServer((request,response)=>{
     response.end("<h1>ABOUT PAGE</h1>")
    }else{
      response.writeHead(404,{"content-type":"text/html"});
-    response.end("<h1>pahe not found</h1>")
+    response.end("<h1>page not found</h1>")
+   } 
+   }else{
+    response.writeHead(405,{"content-type":"text/html"});
+    response.end("<h1>Method not alllowed</h1>")
    }
      
 });

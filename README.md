@@ -155,6 +155,63 @@ db.products.find()
 db.products.find({ category: "Monitors" })
 ```
 
+## HTTP status code
+1. 100 range: Informational response
+2. 200 range: Success respoonse
+  -200:OK
+  -201:Created
+3. 300 range: Redirection response
+4. 400 range: Client/User error response
+  -400:Bad request
+  -401:unauthorized
+  -403:Forbidden
+  -404:Not Found
+  -404:Method not allowed
+  -409:Conflict
+  -422:Unprocessable entry
+5. 500 range: Server error
+  -500:Internal Server Error
+  -502:Bad gateway
+  -504:Timeout
+
+
+## Sematic Coding
+
+1. Files and folder Structure
+2. Files and folder naming
+3. Function and variable naming
+
+## API folder strucutre
+root/ 
+- package.json
+- .env
+- .env.example
+- .gitignore
+- .nodemodules/
+- src/
+   - server.js
+   - app.js
+   - routes/
+   - controllers/
+     - usercontroller.js
+   - services/
+     - userServices.js
+   - models/
+     - userModel.js
+   - constants/
+     - roles.js
+   - lib/
+     - userType.js
+   - utils/
+     - jwtAuth.js
+   - helper/
+     - dataformatter.js
+   
+
+
+
+
+
 ### findOne
 
 ```
