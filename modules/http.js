@@ -15,7 +15,7 @@ const app = http.createServer((request,response)=>{
      response.writeHead(404,{"content-type":"text/html"});
     response.end("<h1>pahe not found</h1>")
    }
-    
+     
 });
 app.listen(5001,()=>{
     console.log("Server running at port 5001");
