@@ -27,6 +27,7 @@
     "type": "vegetable",
     "description": "Asparagus with ham on the wooden table",
     "price": 18.95,
-    "rating": 3   
+    "rating": 3 ,
+    "width": 299  
   }
 ]
