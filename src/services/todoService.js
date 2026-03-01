@@ -13,4 +13,5 @@ const getOne = () => {
   const oneTask = todos.find((item) => item.id == 10);
   return oneTask;
 };
+
 export default { getAll, getOne };

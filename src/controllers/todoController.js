@@ -11,6 +11,7 @@ const getOneTodo=(req,res)=>{
   res.json(data );
 }
 const createTodo=(req,res)=>{
+  
   res.send("Create a todos")
 }
 export default {getTodos,getOneTodo,createTodo};
