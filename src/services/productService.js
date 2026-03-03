@@ -1,21 +1,25 @@
-import fs, {readFileSync} from "fs";
- const rawData = readFileSync("./src/data/products.json", "utf-8");
-  const products = JSON.parse(rawData);
-const getProducts =(query)=>{
-   
-  const filteredProducts = products.filter((products) => products.price < 300);
-  return filteredProducts; 
-}
-const getProductByID=(id)=>{
-  const foundProduct=products.find((product)=>product.id == id);
+import fs, { readFileSync } from "fs";
+import Product from "../models/Product.js";
 
-  return foundProduct; 
-
+const getProducts = async (query) => {
+  const products = await Product.find();
+  return products;
+};
+const getProductByID = async (id) => {
+  const product = await product.findById(id);
+  return product;
+};
+const createProduct = async (data) => {
+  const createdProduct = await Product.create(data);
+  return createProduct;
+};
+const updateProduct = async (id, data) => {
+  const updatedProduct = await Product.findByIdAndUpdate(id, data,{
+    new:true,
+  });
+  return updatedProduct;
+};
+const deleteProduct = async (id)=>{
+  await Product.findByIdAndDelete(id);
 }
-const createProduct=(data)=>{
- products.push(data)
- fs.writeFileSync("./src/data/products.json",JSON.stringify(products));
-     
-
-}
-export default {getProducts,getProductByID,createProduct}
+export default { getProducts, getProductByID, createProduct,updateProduct };

@@ -7,25 +7,43 @@ const getProducts = (req, res) => {
 
   res.status(500).json(products);
 };
-const getProductByID = (req, res) => {
+const getProductByID = async(req, res) => {
   //Request params
   const id = req.params.id;
 
-  const product = productService.getProductByID(id);
+  const product = await  productService.getProductByID(id);
 
   res.json(product);
 
   res.send(`product of id :${id}`);
 };
-const createProduct = (req, res) => {
-  productService.createProduct(req.body);
-  res.status(201).send("product created Successfully");
+const createProduct = async(req, res) => {
+  try {
+    const data =await productService.createProduct(req.body);
+    res.status(201).json(data);
+  } catch (error) {
+    res.status(500).send(error.message);
+    
+  }
+  
 };
-const updateProduct = (req, res) => {
-  res.send("One product fetched");
+const updateProduct = async(req, res) => {
+  const id = req.params.id;
+try {
+   const data =await  productService.updateProduct(id,req.body)
+  res.status(201).send(data ) 
+} catch (error) {
+     res.status(500).send(error.message);
+}
 };
-const deleteProduct = (req, res) => {
-  res.send("Product deleted");
+const deleteProduct = async(req, res) => {
+  const id =req.params.id;
+try {
+   await productService.deleteProduct(id); 
+   res.send(`product successfully deleted with this id: ${id}`);
+} catch (error) {
+  res.status(500).send(error.message);
+}
 };
 export default {
   getProducts,
