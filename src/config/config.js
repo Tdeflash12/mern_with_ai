@@ -6,6 +6,7 @@ const config = {
     name:process.env.NAME || "",
     port:process.env.PORT || 5000,
     version:process.env.VERSION || "0.1.1",
+    jwtSecret: process.env.jwtSecret || "",
     
 
 

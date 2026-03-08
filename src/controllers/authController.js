@@ -1,5 +1,7 @@
-import authService from "../services/authService.js"
+import jwt, { verify } from "jsonwebtoken";
 
+import authService from "../services/authService.js";
+import { createJWT } from "../utils/jwt.js";
 const login=async(req,res)=>{
   try {
     const input=req.body;
@@ -13,9 +15,15 @@ const login=async(req,res)=>{
     return res.status(400).send("Password is required");
   }
   const data=await authService.login(input)
-  res.json(data)
+  // generate token
+ const token =createJWT(data);
+ const result=await  verifyJWT(token)
+ console.log(result )
+  
+ res.json(data)
+
   } catch (error) {
-    res.status(error.statuscode||500 ).send(error.message);
+    res.status(error.statuscode || 500 ).send(error.message);
   }
 }
 
