@@ -2,49 +2,47 @@ import jwt, { verify } from "jsonwebtoken";
 
 import authService from "../services/authService.js";
 import { createJWT } from "../utils/jwt.js";
-const login=async(req,res)=>{
+const login = async (req, res) => {
   try {
-    const input=req.body;
-    if(!input){
+    const input = req.body;
+    if (!input) {
       return res.status(400).send("Required data are missing ");
     }
-     if(!input.email){
-    return res.status(400).send("email is required");
-  }
-     if(!input.password){
-    return res.status(400).send("Password is required");
-  }
-  const data=await authService.login(input)
-  // generate token
- const token =createJWT(data);
- const result=await  verifyJWT(token)
- console.log(result )
-  
- res.json(data)
+    if (!input.email) {
+      return res.status(400).send("email is required");
+    }
+    if (!input.password) {
+      return res.status(400).send("Password is required");
+    }
+    const data = await authService.login(input);
+    
+    const authToken = createJWT(data);
+    res.cookie("authToken",authToken,{maxAge:86400*1000});
+    
 
+    res.json(data);
   } catch (error) {
-    res.status(error.statuscode || 500 ).send(error.message);
+    res.status(error.statuscode || 500).send(error.message);
   }
-}
+};
 
-const register=async(req,res)=>{
-  const input=req.body;
+const register = async (req, res) => {
+  const input = req.body;
 
   try {
-    if(!input.password){
-    return res.status(400).send("Password is required");
-  }
-  if(!input.confirmPassword){
-    return res.status(400).send("Password is required");
-  }
-  if(input.password!==input.confirmPassword){
-     return res.status(400).send("Passwords do not  match");
-  }
-    const data =await authService.register(input);;
-  res.status(201).json (data);
+    if (!input.password) {
+      return res.status(400).send("Password is required");
+    }
+    if (!input.confirmPassword) {
+      return res.status(400).send("Password is required");
+    }
+    if (input.password !== input.confirmPassword) {
+      return res.status(400).send("Passwords do not  match");
+    }
+    const data = await authService.register(input);
+    res.status(201).json(data);
   } catch (error) {
-        res.status(error.statuscode||500 ).send(error.message);
-
+    res.status(error.statuscode || 500).send(error.message);
   }
-}
-export default {register,login };
+};
+export default { register, login };

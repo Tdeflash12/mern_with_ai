@@ -4,6 +4,8 @@ const getProducts = (req, res) => {
   //request query
 
   const products = productService.getProducts(req.query);
+  console.log(req.headers.cookie);
+
 
   res.status(500).json(products);
 };
@@ -19,7 +21,7 @@ const getProductByID = async(req, res) => {
 };
 const createProduct = async(req, res) => {
   try {
-    const data =await productService.createProduct(req.body);
+    const data =await productService.createProduct(req.body,req.user.name);
     res.status(201).json(data);
   } catch (error) {
     res.status(500).send(error.message);

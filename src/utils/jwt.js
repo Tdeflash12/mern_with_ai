@@ -7,7 +7,7 @@ function createJWT(data){
      }); 
      return token;
 }
-async function verifyJtw(authToken){
+async function verifyJWT(authToken){
     return await new Promise((resolve,reject)=>{
    jwt.verify(authToken,config.jwtSecret,(error,data)=>{
     if(error) return reject(error);
@@ -16,4 +16,4 @@ async function verifyJtw(authToken){
 } )
 }   
     
-export {createJWT};
+export {createJWT,verifyJWT};

@@ -9,8 +9,10 @@ const getProductByID = async (id) => {
   const product = await product.findById(id);
   return product;
 };
-const createProduct = async (data) => {
-  const createdProduct = await Product.create(data);
+const createProduct = async (data,username ) => {
+  const createdProduct = await Product.create({
+    ...data,
+    createdBy});
   return createProduct;
 };
 const updateProduct = async (id, data) => {
