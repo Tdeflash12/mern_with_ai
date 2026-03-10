@@ -20,8 +20,9 @@ const getProductByID = async(req, res) => {
   res.send(`product of id :${id}`);
 };
 const createProduct = async(req, res) => {
+  
   try {
-    const data =await productService.createProduct(req.body,req.user.name);
+    const data =await productService.createProduct(req.body,req.user._id  );
     res.status(201).json(data);
   } catch (error) {
     res.status(500).send(error.message);
@@ -32,19 +33,20 @@ const createProduct = async(req, res) => {
 const updateProduct = async(req, res) => {
   const id = req.params.id;
 try {
-   const data =await  productService.updateProduct(id,req.body)
+   const data =await  productService.updateProduct(id,req.body,req.users._id)
   res.status(201).send(data ) 
 } catch (error) {
-     res.status(500).send(error.message);
+     res.status(error.statusCode || 500).send(error.message);
 }
 };
 const deleteProduct = async(req, res) => {
   const id =req.params.id;
 try {
-   await productService.deleteProduct(id); 
+   await productService.deleteProduct(id,user._id); 
    res.send(`product successfully deleted with this id: ${id}`);
 } catch (error) {
-  res.status(500).send(error.message);
+     res.status(error.statusCode || 500).send(error.message);
+   
 }
 };
 export default {

@@ -9,6 +9,8 @@ import mongoose from "mongoose";
 import connectDB from "./config/database.js";
 import logger from "./middleware/logger.js";
 import auth from "./middleware/auth.js";
+import roleBasedAuth from "./middleware/roleBasedAuth.js";
+import { ADMIN } from "./constants/roles.js";
 
 
 const app = express();
@@ -26,7 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/products", productRoutes);
-app.use("/api/users",auth, userRoutes);
+app.use("/api/users",auth,roleBasedAuth(ADMIN),userRoutes);
 app.use("/todos", todosRoute);
 app.use("/api/auth", authRoutes);
 

@@ -1,7 +1,7 @@
-import jwt, { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 import authService from "../services/authService.js";
-import { createJWT } from "../utils/jwt.js";
+import {createJWT}from "../utils/jwt.js"
 const login = async (req, res) => {
   try {
     const input = req.body;

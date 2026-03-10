@@ -16,4 +16,4 @@ const updateUser = async (id, data) => {
 const deleteUser = async (data) => {
   await User.findByIdAndDelete(id);
 };
-export default { createUser, getUsers, getUserById, updateUser, deleteUser };
+export default { createUser,getUsers, getUserById, updateUser, deleteUser };
