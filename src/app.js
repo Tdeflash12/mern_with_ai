@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import config from "./config/config.js";
 import todosRoute from "./routes/todoRoute.js";
 import productRoutes from "./routes/productRoute.js";
+import orderRoutes from "./routes/orderRoute.js";
 import userRoutes from "./routes/userRoute.js";
 import authRoutes from "./routes/authRoute.js";
 import mongoose from "mongoose";
@@ -28,10 +29,10 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 app.use("/api/users",auth,roleBasedAuth(ADMIN),userRoutes);
 app.use("/todos", todosRoute);
 app.use("/api/auth", authRoutes);
-
 app.listen(config.port, () => {
   console.log(`Server running at port ${config.port}...`);
 });

@@ -1,11 +1,10 @@
-import fs, { readFileSync } from "fs";
 import productService from "../services/productService.js ";
 const getProducts = (req, res) => {
   //request query
   const products = productService.getProducts(req.query);
   console.log(req.headers.cookie);
 
-
+ 
   res.status(500).json(products);
 };
 const getProductByID = async(req, res) => {
