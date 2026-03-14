@@ -1,4 +1,5 @@
 import Product from "../models/Product.js";
+import uploadFile from "../utils/file.js";
 
 const getProducts = async (query) => {
   const { brands, category, min, max, limit, name, offset } = query;
@@ -25,14 +26,16 @@ const getProductByID = async (id) => {
   }
   return product;
 };
-const createProduct = async (data, username) => {
+const createProduct = async (data,files, createdBy) => {
+  const uploadedFiles = uploadFile(files) 
   const createdProduct = await Product.create({
     ...data,
     createdBy,
+    imageUrls: uploadedFiles.map((items)=> items?.url), 
   });
   return createProduct;
 };
-const updateProduct = async (id, data, userId) => {
+const updateProduct = async (id, data,files, userId) => {
   const product = await getProductByID(id);
 
   if (product.createdBy != userId) {
@@ -41,8 +44,17 @@ const updateProduct = async (id, data, userId) => {
       message: "Access denied",
     };
   }
-  const updatedProduct = await Product.findByIdAndUpdate(id, data, {
-    new: true,
+  const updateData=data;
+   if (files.length>0){
+    const uploadedFiles = uploadFile(files) 
+    updateData.imageUrls=uploadedFiles.map((items)=> items?.url);
+
+   }
+  const updatedProduct = await Product.findByIdAndUpdate(
+    id, 
+    updateData,
+    {
+       new: true,
   });
   return updatedProduct;
 };

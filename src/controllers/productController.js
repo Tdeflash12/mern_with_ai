@@ -20,7 +20,7 @@ const getProductByID = async(req, res) => {
 const createProduct = async(req, res) => {
   
   try {
-    const data =await productService.createProduct(req.body,req.user._id  );
+    const data =await productService.createProduct(req.body,req.files, req.user._id  );
     res.status(201).json(data);
   } catch (error) {
     res.status(500).send(error.message);

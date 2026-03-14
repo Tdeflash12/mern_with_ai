@@ -1,4 +1,6 @@
 import express from "express";
+import multer from "multer";
+import {v2 as cloudinary} from "cloudinary";
 import bodyParser from "body-parser";
 import config from "./config/config.js";
 import todosRoute from "./routes/todoRoute.js";
@@ -12,12 +14,14 @@ import logger from "./middleware/logger.js";
 import auth from "./middleware/auth.js";
 import roleBasedAuth from "./middleware/roleBasedAuth.js";
 import { ADMIN } from "./constants/roles.js";
-
+import connectCloudinary from "./config/cloudinary.js";
 
 const app = express();
+const upload = multer({ storage:multer.memoryStorage() });
 connectDB();
+connectCloudinary()
 app.use(bodyParser.json());
-app.use(logger)
+app.use(logger);
 
 app.get("/", (req, res) => {
   res.json({
@@ -28,9 +32,9 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/api/products", productRoutes);
+app.use("/api/products",upload.array("images",5), productRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api/users",auth,roleBasedAuth(ADMIN),userRoutes);
+app.use("/api/users", auth, roleBasedAuth(ADMIN), userRoutes);
 app.use("/todos", todosRoute);
 app.use("/api/auth", authRoutes);
 app.listen(config.port, () => {

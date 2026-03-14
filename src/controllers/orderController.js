@@ -8,16 +8,40 @@ const getOrders = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
-const createOrder = async (req, res) => {
-    const input = req.body;
-    if(!input.orderItems || !input.orderItems.length){
-        return res.status(400).send("Order items are required.")
-    }
+const getOrdersByUser = async (req, res) => {
   try {
-    const data = await orderService.createOrder(req.body,req.user);
+    const data = await orderService.getOrdersByUser(req.user._id);
     res.json(data);
   } catch (error) {
     res.status(500).send(error.message);
+  }
+};
+const getOrdersById = async (req, res) => {
+  try {
+    const data = await orderService.getOrdersById(req.params.id);
+    res.json(data);
+  } catch (error) {
+    res.status(error.statusCode || 500).send(error.message);
+  }
+};
+const createOrder = async (req, res) => {
+  const input = req.body;
+  if (!input.orderItems || !input.orderItems.length) {
+    return res.status(400).send("Order items are required.");
+  }
+  try {
+    const data = await orderService.createOrder(req.body, req.user);
+    res.json(data);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+const updateOrder = async (req, res) => {
+  try {
+    const data = await orderService.updateOrder(req.params.id,req.body);
+    res.json(data);
+  } catch (error) {
+    res.status(error.statusCode || 500).send(error.message);
   }
 };
 const deleteOrder = async (req, res) => {
@@ -28,4 +52,11 @@ const deleteOrder = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
-export default { getOrders, createOrder, deleteOrder };
+export default {
+  getOrders,
+  createOrder,
+  deleteOrder,
+  getOrdersByUser,
+  getOrdersById,
+  updateOrder
+};
