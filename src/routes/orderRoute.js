@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/", auth, roleBasedAuth(ADMIN), orderController.getOrders);
 router.get("/user", auth,  orderController.getOrdersByUser);
 router.get("/:id", auth, roleBasedAuth(ADMIN), orderController.getOrdersById);
-router.put("/:id", auth, roleBasedAuth(ADMIN), orderController.updateOrder
+router.put("/:id", auth, roleBasedAuth(ADMIN), orderController.updateOrder);
 
 
 
