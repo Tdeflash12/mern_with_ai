@@ -1,4 +1,6 @@
+import { PAYMENT_STATUS_COMPLETED } from "../constants/paymentStatuses.js";
 import Order from "../models/Order.js";
+import payment from "../utils/payment.js";
 const getOrders = async () => {
   const orders = await Order.find()
     .populate("orderItems.product")
@@ -8,33 +10,73 @@ const getOrders = async () => {
 const getOrdersByUser = async (userId) => {
   const orders = await Order.find({ user: userId })
     .populate("orderItems.product")
-    .populate("user", ["name", "email", "phone", "address"]);
+    .populate("user", ["name", "email", "phone", "address"])
+    .populate("payment");
   return orders;
 };
 const getOrdersById = async (id) => {
   const order = await Order.findById({ user: userId })
     .populate("orderItems.product")
     .populate("user", ["name", "email", "phone", "address"]);
-  if (!order) {
-    throw {
-      statusCode: 404,
-      message: "Order not found.",
-    };
-  }
+
   return orders;
 };
 const createOrder = async (data, userId) => {
   const orderNumber = crypto.randomUUID();
   return await Order.create({ ...data, user: userId, orderNumber });
 };
-const updateOrder = async (id,data) => {
-  return await Order.findByIdAndUpdate(id,{
-    status: data.status,
-  },{new:true});
+const updateOrder = async (id, data) => {
+  return await Order.findByIdAndUpdate(
+    id,
+    {
+      status: data.status,
+    },
+    { new: true },
+  );
 };
 const deleteOrder = async (id) => {
   return await Order.findByIdAndDelete(id);
 };
+const orderPayment = async (id) => {
+  const order = await getOrderById(id);
+  const transactionId = crypto.randomUUID();
+
+  const orderPayment = await Payment.create({
+    amount: order.totalPrice,
+    method: "online",
+    transactionId,
+  });
+  await Order.findByIdAndUpdate(id, {
+    payment: orderPayment._id,
+  });
+  return await payment.payViaKhalti({
+    amount: order.totalPrice,
+    purchaseOrderId: order.id,
+    purchaseOrderName: order.orderNumber,
+    customer: order.user,
+  });
+};
+const confirmOrderPayment = async (id, status) => {
+  const order = await getOrdersById(id);
+  if (status.toUpperCase() != PAYMENT_STATUS_COMPLETED) {
+    await Payment.findByIdAndUpdate(order.payment.payment_id, {
+      status: "Failed", 
+    });
+  }
+
+  throw {
+    statusCode: 400,
+    message: "Payment Failed",
+  };
+  return await Payment.findByIdAndUpdate(
+    order.payment.payment_id,
+    {
+      status: "ORDER_STATUS_CONFIRMED",
+    },
+    { new: true },
+  );
+};
+
 export default {
   getOrders,
   createOrder,
@@ -42,4 +84,5 @@ export default {
   getOrdersByUser,
   getOrdersById,
   updateOrder,
+  orderPayment,
 };

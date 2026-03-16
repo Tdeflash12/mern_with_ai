@@ -15,6 +15,11 @@ router.put("/:id", auth, roleBasedAuth(ADMIN), orderController.updateOrder);
 
 router.post("/", auth, orderController.createOrder);
 router.delete("/:id", auth, roleBasedAuth(ADMIN), orderController.deleteOrder);
+//
+router.post("/:id/payment", auth,  orderController.orderPayment);
+router.put ("/:id/payment/confirm", auth,  orderController.confirmOrderPayment);
+
+
 
 
 export default router;

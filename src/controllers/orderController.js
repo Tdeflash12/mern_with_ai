@@ -52,11 +52,33 @@ const deleteOrder = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+const orderPayment = async (req, res) => {
+  const id = req.params.id;
+  
+  try {
+    const data = await orderService.createOrder(id);
+    res.json(data);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+const confirmOrderPayment = async (req, res) => {
+  const id = req.params.id;
+  
+  try {
+    const data = await orderService.confirmOrderPayment(id,req.body.status);
+    res.json(data);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
 export default {
   getOrders,
   createOrder,
   deleteOrder,
   getOrdersByUser,
   getOrdersById,
-  updateOrder
+  updateOrder,
+  orderPayment,
+  confirmOrderPayment,
 };

@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config ();
 const config = {
+    appUrL : process.env.APP_URL || "",
     mongoDB_URl :process.env.mongoDB_URl || "", 
     name:process.env.NAME || "",
     port:process.env.PORT || 5000,
@@ -12,6 +13,12 @@ const config = {
       apiKey:process.env.CLOUDINARY_API_KEY ||"",
       apiSecret:process.env.CLOUDINARY_API_SECRET ||"",
     },
+    khalti:{
+      apiKey:process.env.KHALTI_API_KEY || "",
+      apiUrl:process.env.KHALTI_API_URL || "",
+      returnUrl:process.env.KHALTI_RETURN_URL || "",
+
+    }
 };
 export default config;
 

@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
-import { ORDER_STATUS_CONFIRMED, ORDER_STATUS_DELIVERED, ORDER_STATUS_PENDING, ORDER_STATUS_SHIPPED } from "../constants/orderStatuses.js ";
+import {
+  ORDER_STATUS_CONFIRMED,
+  ORDER_STATUS_DELIVERED,
+  ORDER_STATUS_PENDING,
+  ORDER_STATUS_SHIPPED,
+} from "../constants/orderStatuses.js ";
 const orderSchema = mongoose.Schema({
   orderNumber: {
     type: String,
@@ -26,10 +31,11 @@ const orderSchema = mongoose.Schema({
   status: {
     type: String,
     default: "",
-    enum: [ORDER_STATUS_PENDING,
-        ORDER_STATUS_CONFIRMED,
-        ORDER_STATUS_DELIVERED
-        ,ORDER_STATUS_SHIPPED
+    enum: [
+      ORDER_STATUS_PENDING,
+      ORDER_STATUS_CONFIRMED,
+      ORDER_STATUS_DELIVERED,
+      ORDER_STATUS_SHIPPED,
     ],
   },
   totalPrice: {
@@ -58,7 +64,11 @@ const orderSchema = mongoose.Schema({
     default: Date.now(),
     immutable: true,
   },
+  payment: {
+    type: mongoose.Types.ObjectId,
+    ref: "Payment ",
+  },
 });
 
-const model = mongoose.model("Order",orderSchema);
+const model = mongoose.model("Order", orderSchema);
 export default model;
