@@ -7,19 +7,15 @@ const router = express.Router();
 
 //URL:/api/orders
 router.get("/", auth, roleBasedAuth(ADMIN), orderController.getOrders);
-router.get("/user", auth,  orderController.getOrdersByUser);
+router.get("/user", auth, orderController.getOrdersByUser);
 router.get("/:id", auth, roleBasedAuth(ADMIN), orderController.getOrdersById);
 router.put("/:id", auth, roleBasedAuth(ADMIN), orderController.updateOrder);
-
-
 
 router.post("/", auth, orderController.createOrder);
 router.delete("/:id", auth, roleBasedAuth(ADMIN), orderController.deleteOrder);
 //
-router.post("/:id/payment", auth,  orderController.orderPayment);
-router.put ("/:id/payment/confirm", auth,  orderController.confirmOrderPayment);
-
-
-
+router.post("/:id/payment/khalti", auth, orderController.orderPaymentViaKhalti);
+router.put( "/:id/payment/confirm-payment",auth,orderController.confirmOrderPayment,
+);
 
 export default router;

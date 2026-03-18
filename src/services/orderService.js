@@ -37,7 +37,7 @@ const updateOrder = async (id, data) => {
 const deleteOrder = async (id) => {
   return await Order.findByIdAndDelete(id);
 };
-const orderPayment = async (id) => {
+const orderPaymentViaKhalti  = async (id) => {
   const order = await getOrderById(id);
   const transactionId = crypto.randomUUID();
 
@@ -49,7 +49,7 @@ const orderPayment = async (id) => {
   await Order.findByIdAndUpdate(id, {
     payment: orderPayment._id,
   });
-  return await payment.payViaKhalti({
+  return await payment.orderPaymentViaKhalti({
     amount: order.totalPrice,
     purchaseOrderId: order.id,
     purchaseOrderName: order.orderNumber,
@@ -68,7 +68,7 @@ const confirmOrderPayment = async (id, status) => {
     statusCode: 400,
     message: "Payment Failed",
   };
-  return await Payment.findByIdAndUpdate(
+ await Payment.findByIdAndUpdate(
     order.payment.payment_id,
     {
       status: "ORDER_STATUS_CONFIRMED",
@@ -84,5 +84,5 @@ export default {
   getOrdersByUser,
   getOrdersById,
   updateOrder,
-  orderPayment,
+  orderPaymentViaKhalti,
 };
