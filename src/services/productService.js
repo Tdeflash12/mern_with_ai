@@ -1,3 +1,4 @@
+import { ADMIN } from "../constants/roles.js";
 import Product from "../models/Product.js";
 import uploadFile from "../utils/file.js";
 
@@ -16,7 +17,7 @@ const getProducts = async (query) => {
     .skip(offset); //
   return products;
 };
-const getProductByID = async (id) => {
+const getProductById = async (id) => {
   const product = await product.findById(id);
   if (!product) {
     throw {
@@ -35,10 +36,10 @@ const createProduct = async (data,files, createdBy) => {
   });
   return createProduct;
 };
-const updateProduct = async (id, data,files, userId) => {
+const updateProduct = async (id, data,files,user) => {
   const product = await getProductByID(id);
 
-  if (product.createdBy != userId) {
+  if (product.createdBy != user._id && req.user.roles.includes(ADMIN)) {
     throw {
       statusCode: 403,
       message: "Access denied",
@@ -58,13 +59,14 @@ const updateProduct = async (id, data,files, userId) => {
   });
   return updatedProduct;
 };
-const deleteProduct = async (id, userId) => {
-  await Product.findByIdAndDelete(id);
-  if (product.createdBy != userId) {
+const deleteProduct = async (id, user) => {
+  const product =await getProductById(id)
+  if (product.createdBy != user._id && !user.roles.includes(ADMIN) ) {
     throw {
       statusCode: 403,
       message: "Access denied",
     };
   }
+  await Product.findByIdAndDelete(id)
 };
-export default { getProducts, getProductByID, createProduct, updateProduct };
+export default { getProducts, getProductById, createProduct, updateProduct };

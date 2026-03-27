@@ -6,14 +6,29 @@ import roleBasedAuth from "../middleware/roleBasedAuth.js";
 import { MERCHANT } from "../constants/roles.js";
 
 const router = express.Router();
-router.get("/",productController.getProducts); 
+router.get("/", productController.getProducts);
+router.get("/users/:id", productController.getProducts);
+
 
 router.get("/:id", productController.getProductByID);
-router.post("/", auth,roleBasedAuth(MERCHANT), productController.createProduct )
+router.post(
+  "/",
+  auth,
+  roleBasedAuth(MERCHANT),
+  productController.createProduct,
+);
 
-router.put("/:id",auth,roleBasedAuth(MERCHANT),productController.updateProduct); 
-router.delete("/",auth,roleBasedAuth(MERCHANT), productController.deleteProduct); 
-
+router.put(
+  "/:id",
+  auth,
+  roleBasedAuth(MERCHANT),
+  productController.updateProduct,
+);
+router.delete(
+  "/",
+  auth,
+  roleBasedAuth(MERCHANT),
+  productController.deleteProduct,
+);
 
 export default router;
- 
