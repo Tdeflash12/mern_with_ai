@@ -33,7 +33,8 @@ type:[String],
     type:mongoose.Schema.Types.ObjectId,
     ref:"User",
     required:["true","Created by user id is required"],
-  }, 
+  },
+  description:String,  
 });
 mongoose.model("Product", productSchema);
 export default model;

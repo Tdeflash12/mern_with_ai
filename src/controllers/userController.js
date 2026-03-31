@@ -5,8 +5,7 @@ const createUser = async (req, res) => {
     const data = await userService.createUser(req.body);
     res.status(201).json(data);
   } catch (error) {
-      res.status(error.statusCode || 500).send(error.message);
-
+    res.status(error.statusCode || 500).send(error.message);
   }
 };
 
@@ -18,11 +17,10 @@ const getUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const id = req.params.id;
-  const data = await userService.getUserById(id);
-  res.json(data);
+    const data = await userService.getUserById(id);
+    res.json(data);
   } catch (error) {
     res.status(error.statusCode || 500).send(error.message);
-    
   }
 };
 
@@ -55,6 +53,18 @@ const updateProfileImage = async (req, res) => {
     res.status(error.statusCode || 500).send(error.message);
   }
 };
+const createMerchant = async (req, res) => {
+  const userId = req.body.userId;
+  try {
+    if (!userId)
+      return res.status(400).send("Merchant id is required.");
+
+    const data = await userService.createMerchant(id, file, req.user);
+    res.json(data);
+  } catch (error) {
+    res.status(error.statusCode || 500).send(error.message);
+  }
+};
 
 export default {
   createUser,
@@ -63,4 +73,5 @@ export default {
   updateUser,
   deleteUser,
   updateProfileImage,
+  createMerchant,
 };

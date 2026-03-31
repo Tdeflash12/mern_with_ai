@@ -115,6 +115,13 @@ const order =await getOrdersById(id)
     { new: true },
   );
 };
+const getOrdersOfMerchant = async (userId) => {
+  const orders = await Order.find()
+    .populate("orderItems.product")
+    .populate("user", ["name", "email", "phone", "address"])
+    .populate("payment");
+  return orders;
+};
 
 export default {
   getOrders,
@@ -124,4 +131,6 @@ export default {
   getOrdersById,
   updateOrder,
   orderPaymentViaKhalti,
+  confirmOrderPayment,
+  getOrdersOfMerchant,
 };

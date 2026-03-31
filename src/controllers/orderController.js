@@ -80,6 +80,14 @@ const confirmOrderPayment = async (req, res) => {
     res.status(error.statusCode || 500) .send(error.message);
   }
 };
+const getOrdersOfMerchant = async (req, res) => {
+  try {
+    const data = await orderService.getOrdersOfMerchant(req.user._id);
+    res.json(data);
+  } catch (error) {
+   res.status(error.statusCode || 500).send(error.message);
+  }
+};
 export default {
   getOrders,
   createOrder,
@@ -89,4 +97,5 @@ export default {
   updateOrder,
   orderPaymentViaKhalti,
   confirmOrderPayment,
+  getOrdersOfMerchant,
 };

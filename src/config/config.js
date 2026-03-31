@@ -18,9 +18,12 @@ const config = {
       apiUrl:process.env.KHALTI_API_URL || "",
       returnUrl:process.env.KHALTI_RETURN_URL || "",
     },
-    emailApiKey:{
-      emailApiKey:process.env.EMAIL_API_KEY
+    emailApiKey:process.env.EMAIL_API_KEY || "",
+    gemini:{
+      url:process.env.GEMINI_URl || "",
+      apiKey:process.env.GEMINI_API_KEY || "" 
     }
+    
 };
 export default config;
 

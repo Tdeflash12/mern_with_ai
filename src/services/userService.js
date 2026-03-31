@@ -1,4 +1,4 @@
-import { ADMIN } from "../constants/roles.js";
+import { ADMIN, MERCHANT, USER } from "../constants/roles.js";
 import User from "../models/User.js";
 import uploadFile from "../utils/file.js";
 
@@ -9,41 +9,45 @@ const getUsers = async () => {
 };
 const getUserById = async (id) => {
   const user = await User.findById(id);
-  if(!user){
-    throw{
-      statusCode:404,
-      message:"User Not Found",
-    }
+  if (!user) {
+    throw {
+      statusCode: 404,
+      message: "User Not Found",
+    };
   }
   return user;
 };
-const updateUser = async (id, data,authUser) => {
-  const user =await getUserById(id)
-  if (user.createdBy !=authUser._id && !authUser.roles.includes(ADMIN) ) {
+const updateUser = async (id, data, authUser) => {
+  const user = await getUserById(id);
+  if (user.createdBy != authUser._id && !authUser.roles.includes(ADMIN)) {
     throw {
       statusCode: 403,
       message: "Access denied",
     };
   }
-  const updatedUser = await User.findByIdAndUpdate(id, {
-    name:data.name,
-    phone:data.phone,
-    address:data.address,
-  }, { new: true });
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    {
+      name: data.name,
+      phone: data.phone,
+      address: data.address,
+    },
+    { new: true },
+  );
   return updatedUser;
 };
 const deleteUser = async (data) => {
   await User.findByIdAndDelete(id);
 };
-const updateProfileImage = async (id, file,authUser) => {
-  const user = await getUserById(id)
-  if (user._id !=authUser._id  && !authUser.roles.includes(ADMIN) ) {
+const updateProfileImage = async (id, file, authUser) => {
+  const user = await getUserById(id);
+  if (user._id != authUser._id && !authUser.roles.includes(ADMIN)) {
     throw {
       statusCode: 403,
       message: "Access denied",
     };
   }
-  const uploadedFiles=await uploadFile([file])
+  const uploadedFiles = await uploadFile([file]);
   const updatedUser = await User.findByIdAndUpdate(
     id,
     { profileImageUrl: uploadedFiles[0]?.url },
@@ -51,6 +55,17 @@ const updateProfileImage = async (id, file,authUser) => {
   );
   return updatedUser;
 };
+const createMerchant = async (userId) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    {
+      roles: [USER, MERCHANT],
+    },
+    { new: true },
+  );
+  return updatedUser;
+};
+
 export default {
   createUser,
   getUsers,
@@ -58,4 +73,5 @@ export default {
   updateUser,
   deleteUser,
   updateProfileImage,
+  createMerchant,
 };
