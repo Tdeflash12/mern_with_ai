@@ -15,5 +15,6 @@ async function uploadFile(files) {
     });
      uploadResults.push(result);
   }
+  return uploadResults;
 }
 export default uploadFile;

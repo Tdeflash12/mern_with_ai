@@ -1,7 +1,5 @@
-import { profile } from "console";
 import mongoose from "mongoose";
-import { type } from "os";
-import { ADMIN, MERCHANT, USER } from "../constants/roles";
+import { ADMIN, MERCHANT, USER } from "../constants/roles.js";
 
 const userSchema = new mongoose.Schema({
   name: {

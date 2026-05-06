@@ -2,7 +2,7 @@ import Order from "../models/Order.js";
 import Payment from "../models/Payment.js";
 import crypto from "crypto";
 import payment from "../utils/payment.js";
-import {ORDER_STATUS_COMPLETED} from "../constants/orderStatuses.js"
+import { ORDER_STATUS_CONFIRMED } from "../constants/orderStatuses.js";
 import { PAYMENT_STATUS_COMPLETED } from "../constants/paymentStatuses.js";
 import { ADMIN } from "../constants/roles.js";
 
@@ -20,19 +20,18 @@ const getOrdersByUser = async (userId) => {
   return orders;
 };
 const getOrdersById = async (id) => {
-  const order = await Order.findById({ user: userId })
+  const order = await Order.findById(id)
     .populate("orderItems.product")
     .populate("user", ["name", "email", "phone", "address"])
     .populate("payment");
-    if(!order){
-      throw{
-      statusCode:404,
-      message:"Order not Found"
-    }
+  if (!order) {
+    throw {
+      statusCode: 404,
+      message: "Order not Found",
+    };
   }
 
-
-  return orders;
+  return order;
 };
 const createOrder = async (data, userId) => {
   const orderNumber = crypto.randomUUID();
@@ -110,7 +109,7 @@ const order =await getOrdersById(id)
  await Payment.findByIdAndUpdate(
     order.payment.payment_id,
     {
-      status: "ORDER_STATUS_CONFIRMED",
+      status: ORDER_STATUS_CONFIRMED,
     },
     { new: true },
   );
@@ -120,6 +119,9 @@ const getOrdersOfMerchant = async (userId) => {
     .populate("orderItems.product")
     .populate("user", ["name", "email", "phone", "address"])
     .populate("payment");
+orders.map((order)=>{
+  order.orderItems
+})
   return orders;
 };
 

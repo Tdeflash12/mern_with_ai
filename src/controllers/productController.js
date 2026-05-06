@@ -1,24 +1,24 @@
-import productService from "../services/productService.js ";
-const getProducts = (req, res) => {
-  //request query
-  const products = productService.getProducts(req.query);
-  console.log(req.headers.cookie);
+import productService from "../services/productService.js";
 
-  res.status(error.statusCode || 500).json(products);
+const getProducts = async (req, res) => {
+  try {
+    const products = await productService.getProducts(req.query);
+    res.json(products);
+  } catch (error) {
+    res.status(error.statusCode || 500).send(error.message);
+  }
 };
-const getProductByID = async (req, res) => {
-  //Request params
 
+const getProductByID = async (req, res) => {
   try {
     const id = req.params.id;
-
     const product = await productService.getProductByID(id);
-
     res.json(product);
   } catch (error) {
     res.status(error.statusCode || 500).send(error.message);
   }
 };
+
 const createProduct = async (req, res) => {
   try {
     const data = await productService.createProduct(
@@ -31,6 +31,7 @@ const createProduct = async (req, res) => {
     res.status(error.statusCode || 500).send(error.message);
   }
 };
+
 const updateProduct = async (req, res) => {
   const id = req.params.id;
   try {
@@ -45,6 +46,7 @@ const updateProduct = async (req, res) => {
     res.status(error.statusCode || 500).send(error.message);
   }
 };
+
 const deleteProduct = async (req, res) => {
   const id = req.params.id;
   const user = req.user;
@@ -55,6 +57,7 @@ const deleteProduct = async (req, res) => {
     res.status(error.statusCode || 500).send(error.message);
   }
 };
+
 export default {
   getProducts,
   createProduct,

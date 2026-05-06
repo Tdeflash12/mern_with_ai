@@ -36,5 +36,5 @@ type:[String],
   },
   description:String,  
 });
-mongoose.model("Product", productSchema);
-export default model;
+const Product = mongoose.models.Product || mongoose.model("Product", productSchema);
+export default Product;

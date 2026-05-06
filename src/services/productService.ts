@@ -3,12 +3,23 @@ import { ADMIN } from "../constants/roles.js";
 import Product from "../models/Product.js";
 import uploadFile from "../utils/file.js";
 import promptGemini from "../utils/gemini.js";
+import type { Product as ProductType ,User} from "../types";
+const ProductModel = Product as any;
+type ProductQuery = {
+  brands?: string | string[];
+  category?: string;
+  min?: string | number;
+  max?: string | number;
+  limit?: string | number;
+  name?: string;
+  offset?: string | number;
+  createdBy?: string;
+  sort?: string;
+};
 
-const ProductModel = Product;
-
-const getProducts = async (query) => {
+const getProducts = async (query: ProductQuery): Promise<ProductType[]> => {
   const { brands, category, min, max, limit, name, offset, createdBy, sort } = query;
-  const filters = {};
+  const filters: Record<string, unknown> = {};
 
   if (brands) {
     const brandItems = Array.isArray(brands)
@@ -30,10 +41,10 @@ const getProducts = async (query) => {
   if (limit !== undefined) productQuery = productQuery.limit(Number(limit));
   if (offset !== undefined) productQuery = productQuery.skip(Number(offset));
 
-  return await productQuery;
+  const products = await productQuery;
+  return products;
 };
-
-const getProductById = async (id) => {
+const getProductById = async (id: string): Promise<ProductType> => {
   const product = await ProductModel.findById(id);
   if (!product) {
     throw {
@@ -43,26 +54,28 @@ const getProductById = async (id) => {
   }
   return product;
 };
-
-const createProduct = async (data, files, createdBy) => {
+const createProduct = async (
+  data: ProductType,
+  files: any[],
+  createdBy: string,
+) => {
   const uploadedFiles = await uploadFile(files);
   const promptMessage = PRODUCT_DESCRIPTION_PROMPT.replace("%s", data.name)
     .replace("%s", data.brand ?? "")
     .replace("%s", data.category);
   const description = data.description ?? (await promptGemini(promptMessage));
   const imageUrls = uploadedFiles
-    .map((items) => items?.url)
-    .filter((url) => Boolean(url));
-
-  return await ProductModel.create({
+    .map((items: { url?: string }) => items?.url)
+    .filter((url): url is string => Boolean(url));
+  const createdProduct = await ProductModel.create({
     ...data,
     createdBy,
     imageUrls,
     description,
   });
+  return createdProduct;
 };
-
-const updateProduct = async (id, data, files, user) => {
+const updateProduct = async (id: string, data: ProductType, files: any[], user: User) => {
   const product = await getProductById(id);
 
   if (product.createdBy != user._id && !user.roles.includes(ADMIN)) {
@@ -71,21 +84,19 @@ const updateProduct = async (id, data, files, user) => {
       message: "Access denied",
     };
   }
-
-  const updateData = { ...data };
+  const updateData: ProductType & { imageUrls?: string[] } = { ...data };
   if (files && files.length > 0) {
     const uploadedFiles = await uploadFile(files);
     updateData.imageUrls = uploadedFiles
-      .map((items) => items?.url)
-      .filter((url) => Boolean(url));
+      .map((items: { url?: string }) => items?.url)
+      .filter((url): url is string => Boolean(url));
   }
-
-  return await ProductModel.findByIdAndUpdate(id, updateData, {
+  const updatedProduct = await ProductModel.findByIdAndUpdate(id, updateData, {
     new: true,
   });
+  return updatedProduct;
 };
-
-const deleteProduct = async (id, user) => {
+const deleteProduct = async (id: string, user: User ) => {
   const product = await getProductById(id);
   if (product.createdBy != user._id && !user.roles.includes(ADMIN)) {
     throw {
@@ -95,12 +106,4 @@ const deleteProduct = async (id, user) => {
   }
   await ProductModel.findByIdAndDelete(id);
 };
-
-export default {
-  getProducts,
-  getProductById,
-  getProductByID: getProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-};
+export default { getProducts, getProductById, getProductByID: getProductById, createProduct, updateProduct, deleteProduct };

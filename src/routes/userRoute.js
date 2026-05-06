@@ -1,6 +1,7 @@
 import express from "express";
 import userController from "../controllers/userController.js";
 import roleBasedAuth from "../middleware/roleBasedAuth.js";
+import { ADMIN } from "../constants/roles.js";
 
 const router = express.Router();
 // URL : /api/users
