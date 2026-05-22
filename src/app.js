@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
     status: "OK",
   });
 });
-
+//done
 app.use("/api/products", upload.array("images", 5), productRoutes);
 app.use("/api/orders", auth, orderRoutes);
 app.use("/api/users", auth, upload.single("image", 5), userRoutes);
