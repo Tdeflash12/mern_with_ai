@@ -3,7 +3,7 @@ import { ADMIN } from "../constants/roles.js";
 import Product from "../models/Product.js";
 import uploadFile from "../utils/file.js";
 import promptGemini from "../utils/gemini.js";
-import type { Product as ProductType ,User} from "../types";
+import type { Product as ProductType, User } from "../types/index.js";
 const ProductModel = Product as any;
 type ProductQuery = {
   brands?: string | string[];

@@ -1,8 +1,8 @@
 import userService from "../services/userService.js";
 import type { Request, Response } from "express";
-import type { User } from "../types";
+import type { User } from "../types/index.js";
 
-type UserRequest = Request & { user: User; file?: any };
+type UserRequest = Request & { user?: User; file?: any };
 
 const createUser = async (req: Request, res: Response) => {
   try {

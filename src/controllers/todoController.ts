@@ -1,4 +1,4 @@
-import todoService from "../services/todoService.js";
+import todoService from "../services/todoService";
 import type { Request, Response } from "express";
 
 const getTodos = async (_req: Request, res: Response) => {
@@ -12,7 +12,7 @@ const getTodos = async (_req: Request, res: Response) => {
 
 const getOneTodo = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const id = req.params.id as string;
     const data = await todoService.getOne(id);
     res.json(data);
   } catch (err) {

@@ -1,8 +1,8 @@
 import orderService from "../services/orderService.js";
 import type { Request, Response } from "express";
-import type { User } from "../types";
+import type { User } from "../types/index.js";
 
-type AuthRequest = Request & { user: User };
+type AuthRequest = Request & { user?: User };
 
 const getOrders = async (_req: Request, res: Response) => {
   try {
@@ -15,7 +15,8 @@ const getOrders = async (_req: Request, res: Response) => {
 
 const getOrdersByUser = async (req: AuthRequest, res: Response) => {
   try {
-    const data = await orderService.getOrdersByUser(req.user._id);
+    if (!req.user) return res.status(401).send("Unauthorized");
+    const data = await orderService.getOrdersByUser(req.user._id as string);
     res.json(data);
   } catch (error: any) {
     res.status(error?.statusCode || 500).send(error?.message || "Failed");
@@ -35,6 +36,7 @@ const createOrder = async (req: AuthRequest, res: Response) => {
   try {
     const input = req.body as any;
     if (!input.orderItems || !input.orderItems.length) return res.status(400).send("Order items are required.");
+    if (!req.user) return res.status(401).send("Unauthorized");
     const data = await orderService.createOrder(req.body, req.user);
     res.json(data);
   } catch (error: any) {
@@ -80,7 +82,8 @@ const confirmOrderPayment = async (req: AuthRequest & Request<{ id: string }>, r
 
 const getOrdersOfMerchant = async (req: AuthRequest, res: Response) => {
   try {
-    const data = await orderService.getOrdersOfMerchant(req.user._id);
+    if (!req.user) return res.status(401).send("Unauthorized");
+    const data = await orderService.getOrdersOfMerchant(req.user._id as string);
     res.json(data);
   } catch (error: any) {
     res.status(error?.statusCode || 500).send(error?.message || "Failed");

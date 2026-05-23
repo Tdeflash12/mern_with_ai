@@ -1,10 +1,10 @@
 import productService from "../services/productService.js";
 import type { Request, Response } from "express";
-import type { User } from "../types";
+import type { User } from "../types/index.js";
 
 type ProductRequest = Request & {
-  files?: any[];
-  user: User;
+  files?: any;
+  user?: User;
 };
 
 type ApiError = {
@@ -12,8 +12,8 @@ type ApiError = {
   message?: string;
 };
 
-const getUserId = (user: User) => {
-  if (!user._id) {
+const getUserId = (user?: User) => {
+  if (!user || !user._id) {
     throw {
       statusCode: 401,
       message: "Access denied",
@@ -74,6 +74,7 @@ const createProduct = async (req: ProductRequest, res: Response) => {
 const updateProduct = async (req: ProductRequest & Request<{ id: string }>, res: Response) => {
   try {
     const id = req.params.id;
+    if (!req.user) return res.status(401).send("Unauthorized");
     const data = await productService.updateProduct(
       id,
       req.body,
@@ -89,6 +90,7 @@ const updateProduct = async (req: ProductRequest & Request<{ id: string }>, res:
 const deleteProduct = async (req: ProductRequest & Request<{ id: string }>, res: Response) => {
   try {
     const id = req.params.id;
+    if (!req.user) return res.status(401).send("Unauthorized");
     await productService.deleteProduct(id, req.user);
     res.send(`product successfully deleted with this id: ${id}`);
   } catch (error) {
