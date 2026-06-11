@@ -8,7 +8,9 @@ async function connectDB(){
 
    try {
       const status = await mongoose.connect(config.mongoDB_URl);
-      console.log(`Mongo db connected:${status.connection.host}`);
+      if (status?.connection?.readyState === 1) {
+         console.log("MongoDB connected successfully.");
+      }
    } catch (error) {
       console.log("MongoDB connection error:", error);
    }

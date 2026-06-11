@@ -3,7 +3,12 @@ import type { Request, Response } from "express";
 
 const getTodos = async (_req: Request, res: Response) => {
   try {
-    const data = await todoService.getAll();
+    // debug: inspect service shape
+    // eslint-disable-next-line no-console
+    console.log("todoService keys:", Object.keys(todoService));
+    // eslint-disable-next-line no-console
+    console.log("getAll type:", typeof (todoService as any).getAll);
+    const data = await (todoService as any).getAll();
     res.json(data);
   } catch (err) {
     res.status(500).send("Failed to get todos");
